@@ -1,0 +1,9 @@
+{
+  "namespace": "Luxor9UI",
+  "source": "@luxor9/ui@1.0.0",
+  "shape": "package",
+  "provider": null,
+  "componentCount": 4,
+  "skippedStoryIds": [],
+  "runtimeFontPrefixes": []
+}

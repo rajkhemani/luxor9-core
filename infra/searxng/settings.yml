@@ -1,0 +1,21 @@
+# LUXOR9 — SearXNG settings (local web search provider)
+# Enables the JSON API the searxng_client depends on.
+use_default_settings: true
+
+server:
+  secret_key: "luxor9-dev-searxng-change-me"
+  limiter: false
+  image_proxy: false
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  formats:
+    - html
+    - json
+
+engines:
+  - name: wikipedia
+    disabled: false
+  - name: duckduckgo
+    disabled: false

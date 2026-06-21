@@ -1,0 +1,27 @@
+{
+  "pkg": "@luxor9/ui",
+  "globalName": "Luxor9UI",
+  "projectId": "a454f388-28c2-4089-9917-6a5edf830ee1",
+  "shape": "package",
+  "srcDir": "src",
+  "cssEntry": ".ds-build/luxor9-tailwind.css",
+  "readmeHeader": ".design-sync/conventions.md",
+  "componentSrcMap": {
+    "AgentBuilder": "src/components/AgentBuilder.tsx",
+    "MobileDashboard": "src/components/MobileDashboard.tsx",
+    "AuditReportCard": "src/components/AuditReport.tsx",
+    "TaskBoard": "src/components/TaskBoard.tsx",
+    "AgentSelector": null,
+    "AgentWorkstation": null,
+    "CanvasPanel": null,
+    "ChatMessage": null,
+    "LandingPage": null,
+    "LiveInterface": null,
+    "McpPanel": null,
+    "NeuralCore": null
+  },
+  "dtsPropsFor": {
+    "AuditReportCard": "report: { id: string; target: string; timestamp: number; score: number; summary: string; findings: Array<{ id: string; severity: 'critical' | 'high' | 'medium' | 'low'; title: string; description: string; remediation?: string; affectedComponent?: string }> }",
+    "TaskBoard": "tasks: Array<{ id: string; title: string; subtasks: Array<{ id: string; title: string; completed: boolean }>; completed: boolean; isParallel?: boolean; dependencies?: string[]; assignedAgent?: string; output?: string }>; onToggleTask: (taskId: string) => void; onToggleSubTask: (taskId: string, subTaskId: string) => void; onAddSubTask: (taskId: string, title: string) => void; onRemoveSubTask?: (taskId: string, subTaskId: string) => void; onRemoveTask?: (taskId: string) => void; onAddTask?: (title: string) => void; onUpdateDependencies?: (taskId: string, dependencies: string[]) => void; onExecuteTask?: (task: any) => void; executingTaskIds?: Set<string>"
+  }
+}

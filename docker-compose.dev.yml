@@ -1,0 +1,114 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    container_name: luxor9-api-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./packages/api:/app/packages/api
+      - ./packages/core:/app/packages/core
+      - ./packages/agents:/app/packages/agents
+      - ./packages/mcp:/app/packages/mcp
+      - ./packages/shared:/app/packages/shared
+      - ./tests:/app/tests
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=1
+      - PYTHONPATH=/app/packages/api
+      - DATABASE_URL=postgresql://dev:dev123@postgres:5432/luxor9
+      - REDIS_URL=redis://redis:6379/0
+      - LANGCHAIN_TRACING_V2=true
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+      - LANGSMITH_PROJECT=luxor9
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./packages
+          target: /app/packages
+        - action: rebuild
+          path: ./packages/api/requirements.txt
+    networks:
+      - luxor9-dev
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  ui:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.ui
+      target: builder
+    container_name: luxor9-ui-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./packages/ui/src:/build/src
+      - ./packages/ui/index.html:/build/index.html
+      - ./packages/ui/package.json:/build/package.json
+      - ./packages/shared:/build/../shared
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - api
+    networks:
+      - luxor9-dev
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: luxor9-db-dev
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev123
+      POSTGRES_DB: luxor9
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - luxor9-dev
+
+  redis:
+    image: redis:7-alpine
+    container_name: luxor9-redis-dev
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - luxor9-dev
+
+  strata:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.strata
+    container_name: luxor9-strata-dev
+    ports:
+      - "8081:8080"
+    volumes:
+      - strata-data:/home/strata
+    environment:
+      - STRATA_CONFIG=/app/config.yml
+    networks:
+      - luxor9-dev
+
+volumes:
+  strata-data:
+  postgres-dev:
+
+networks:
+  luxor9-dev:
+    driver: bridge

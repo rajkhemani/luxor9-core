@@ -1,0 +1,35 @@
+# Strata MCP Server Configuration
+# Add your MCP servers here
+# Format: strata add --type <stdio|http> <server-name> <command> [args...]
+
+servers:
+  # Example: Playwright browser automation
+  - name: playwright
+    type: stdio
+    command: npx
+    args:
+      - "@playwright/mcp@latest"
+
+  # Example: Local filesystem
+  - name: filesystem
+    type: stdio
+    command: npx
+    args:
+      - "@anthropic/mcp-filesystem@latest"
+      - /app/data
+
+  # Example: GitHub API
+  - name: github
+    type: stdio
+    command: npx
+    args:
+      - "@github/github-mcp-server@latest"
+    env:
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+
+  # Example: Fetch URLs
+  - name: fetch
+    type: stdio
+    command: npx
+    args:
+      - "@anthropic/mcp-fetch@latest"

@@ -1,0 +1,82 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    container_name: luxor9-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - luxor9-prod
+
+  ui:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.ui
+    container_name: luxor9-ui
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - luxor9-prod
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: luxor9-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-luxor9}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-luxor9}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-luxor9}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - luxor9-prod
+
+  redis:
+    image: redis:7-alpine
+    container_name: luxor9-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - luxor9-prod
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  luxor9-prod:
+    driver: bridge

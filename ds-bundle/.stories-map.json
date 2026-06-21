@@ -1,0 +1,44 @@
+{
+  "global": "Luxor9UI",
+  "pkg": "@luxor9/ui",
+  "pkgDir": "/work/packages/ui",
+  "extraEntries": [],
+  "exported": [],
+  "storybookStatic": null,
+  "keyRecipe": 7,
+  "cfgSliceGlobal": "a139d95ad8ab0a8ba08b44a258c54602e36090304087f48fe923c61aa5a8ae08",
+  "components": [
+    {
+      "name": "AgentBuilder",
+      "group": "general",
+      "srcSha": null,
+      "sourceKey": "a1b8dc69c31c07e4",
+      "cfgSlice": "5ff899b099eb6923833804cda955efdd69101524bec86f67dac5537cd81802e8",
+      "stories": []
+    },
+    {
+      "name": "AuditReportCard",
+      "group": "general",
+      "srcSha": null,
+      "sourceKey": "dd919ec702611bcf",
+      "cfgSlice": "5ff899b099eb6923833804cda955efdd69101524bec86f67dac5537cd81802e8",
+      "stories": []
+    },
+    {
+      "name": "MobileDashboard",
+      "group": "general",
+      "srcSha": null,
+      "sourceKey": "f2ea493b3f6a9653",
+      "cfgSlice": "5ff899b099eb6923833804cda955efdd69101524bec86f67dac5537cd81802e8",
+      "stories": []
+    },
+    {
+      "name": "TaskBoard",
+      "group": "general",
+      "srcSha": null,
+      "sourceKey": "240b2b3a31ab96cb",
+      "cfgSlice": "5ff899b099eb6923833804cda955efdd69101524bec86f67dac5537cd81802e8",
+      "stories": []
+    }
+  ]
+}

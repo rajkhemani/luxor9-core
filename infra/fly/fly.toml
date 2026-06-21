@@ -1,0 +1,23 @@
+app = "luxor9-api"
+primary_region = "iad"
+
+[build]
+  image = "luxoranova/luxor9-api:latest"
+
+[env]
+  ENVIRONMENT = "production"
+  DEBUG = "0"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8000
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+  [[services.ports]]
+    port = 443
+    handlers = ["tls"]
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 100
+    soft_limit = 50

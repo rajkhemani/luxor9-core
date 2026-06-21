@@ -1,0 +1,26 @@
+FROM python:3.11-slim AS builder
+WORKDIR /build
+COPY packages/api/requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+FROM python:3.11-slim AS runtime
+RUN groupadd -r app && useradd -r -g app app
+WORKDIR /app
+ENV PATH=/home/app/.local/bin:$PATH
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONPATH=/app/packages/api
+
+COPY --from=builder --chown=app:app /root/.local /home/app/.local
+COPY --chown=app:app packages/api/ ./packages/api/
+COPY --chown=app:app packages/core/ ./packages/core/
+COPY --chown=app:app packages/agents/ ./packages/agents/
+COPY --chown=app:app packages/mcp/ ./packages/mcp/
+COPY --chown=app:app packages/shared/ ./packages/shared/
+
+USER app
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
+
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

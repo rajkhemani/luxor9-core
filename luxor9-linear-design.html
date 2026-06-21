@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUXOR9 — AI Agent Orchestration Platform</title>
+  <!-- Linear-inspired font setup -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Linear-inspired color palette */
+    :root {
+      /* Background Surfaces */
+      --color-bg-marketing: #08090a;
+      --color-bg-panel: #0f1011;
+      --color-bg-surface: #191a1b;
+      --color-bg-secondary: #28282c;
+      
+      /* Text & Content */
+      --color-text-primary: #f7f8f8;
+      --color-text-secondary: #d0d6e0;
+      --color-text-tertiary: #8a8f98;
+      --color-text-quaternary: #62666d;
+      
+      /* Brand & Accent */
+      --color-brand-indigo: #5e6ad2;
+      --color-accent-violet: #7170ff;
+      --color-accent-hover: #828fff;
+      
+      /* Status Colors */
+      --color-success: #27a644;
+      --color-emerald: #10b981;
+      
+      /* Border System */
+      --color-border-subtle: rgba(255,255,255,0.05);
+      --color-border-standard: rgba(255,255,255,0.08);
+      --color-border-primary: #23252a;
+      --color-border-secondary: #34343a;
+      --color-border-tertiary: #3e3e44;
+      
+      /* Shadows & Depth */
+      --shadow-subtle: rgba(0,0,0,0.03) 0px 1.2px 0px;
+      --shadow-surface: rgba(255,255,255,0.05) bg + 1px solid rgba(255,255,255,0.08);
+      --shadow-elevated: rgba(0,0,0,0.4) 0px 2px 4px;
+      --shadow-focus: rgba(0,0,0,0.1) 0px 4px 12px;
+      
+      /* Typography */
+      --font-primary: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+      
+      /* Letter spacing for display text */
+      --letter-spacing-display-xl: -1.584px;
+      --letter-spacing-display-large: -1.408px;
+      --letter-spacing-display: -1.056px;
+      --letter-spacing-h1: -0.704px;
+      --letter-spacing-h2: -0.288px;
+      --letter-spacing-h3: -0.24px;
+      --letter-spacing-body: normal;
+    }
+    
+    /* OpenType features for Linear's distinctive typeface */
+    .linear-font {
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: var(--font-primary);
+      background-color: var(--color-bg-marketing);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+    }
+    
+    body.linear-font {
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    /* Container & Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    /* Typography Scale */
+    .display-xl {
+      font-size: 72px;
+      font-weight: 510;
+      line-height: 1.0;
+      letter-spacing: var(--letter-spacing-display-xl);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .display-large {
+      font-size: 64px;
+      font-weight: 510;
+      line-height: 1.0;
+      letter-spacing: var(--letter-spacing-display-large);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .display {
+      font-size: 48px;
+      font-weight: 510;
+      line-height: 1.0;
+      letter-spacing: var(--letter-spacing-display);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .h1 {
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.13;
+      letter-spacing: var(--letter-spacing-h1);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .h2 {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: var(--letter-spacing-h2);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .h3 {
+      font-size: 20px;
+      font-weight: 590;
+      line-height: 1.33;
+      letter-spacing: var(--letter-spacing-h3);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .body-large {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.165px;
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .body {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: var(--letter-spacing-body);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .body-medium {
+      font-size: 16px;
+      font-weight: 510;
+      line-height: 1.5;
+      letter-spacing: var(--letter-spacing-body);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .body-semibold {
+      font-size: 16px;
+      font-weight: 590;
+      line-height: 1.5;
+      letter-spacing: var(--letter-spacing-body);
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .small {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.165px;
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .caption {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.13px;
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .label {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: normal;
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    /* Buttons */
+    .btn-ghost {
+      background-color: rgba(255,255,255,0.02);
+      color: var(--color-text-primary);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-weight: 510;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-ghost:hover {
+      background-color: rgba(255,255,255,0.04);
+    }
+    
+    .btn-primary {
+      background-color: var(--color-brand-indigo);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-weight: 510;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--color-accent-hover);
+    }
+    
+    .btn-icon {
+      background-color: rgba(255,255,255,0.03);
+      color: var(--color-text-primary);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-icon:hover {
+      background-color: rgba(255,255,255,0.05);
+    }
+    
+    /* Cards & Containers */
+    .card {
+      background-color: rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border-standard);
+      border-radius: 8px;
+      padding: 24px;
+      transition: all 0.2s ease;
+    }
+    
+    .card:hover {
+      background-color: rgba(255,255,255,0.03);
+      border-color: rgba(255,255,255,0.1);
+    }
+    
+    .panel {
+      background-color: rgba(255,255,255,0.03);
+      border: 1px solid var(--color-border-standard);
+      border-radius: 12px;
+      padding: 32px;
+    }
+    
+    /* Inputs & Forms */
+    .input {
+      background-color: rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border-standard);
+      border-radius: 6px;
+      padding: 12px 14px;
+      color: var(--color-text-secondary);
+      font-family: var(--font-primary);
+      width: 100%;
+      font-size: 16px;
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: var(--color-accent-violet);
+      box-shadow: 0 0 0 2px rgba(113, 112, 255, 0.2);
+    }
+    
+    .input::placeholder {
+      color: var(--color-text-tertiary);
+      opacity: 0.7;
+    }
+    
+    /* Badges & Pills */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 10px;
+      font-weight: 510;
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .badge-success {
+      background-color: var(--color-emerald);
+      color: var(--color-text-primary);
+    }
+    
+    .badge-neutral {
+      background-color: transparent;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border-primary);
+    }
+    
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0px 10px 0px 5px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 510;
+      font-feature-settings: 'cv01', 'ss03';
+      border: 1px solid var(--color-border-primary);
+      background-color: transparent;
+      color: var(--color-text-secondary);
+    }
+    
+    /* Navigation */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .nav-link {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-weight: 510;
+      font-size: 13px;
+      font-feature-settings: 'cv01', 'ss03';
+      transition: color 0.2s ease;
+    }
+    
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--color-text-primary);
+    }
+    
+    /* Hero Section */
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-content {
+      max-width: 500px;
+    }
+    
+    .hero-title {
+      margin-bottom: 24px;
+    }
+    
+    .hero-subtitle {
+      color: var(--color-text-tertiary);
+      margin-bottom: 32px;
+      max-width: 400px;
+    }
+    
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    /* Features Section */
+    .features {
+      padding: 80px 0;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+    
+    .feature-card {
+      text-align: center;
+      padding: 32px;
+    }
+    
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .feature-title {
+      font-size: 20px;
+      font-weight: 590;
+      margin-bottom: 12px;
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .feature-description {
+      color: var(--color-text-tertiary);
+      line-height: 1.6;
+    }
+    
+    /* Agent Grid Section */
+    .agents-section {
+      padding: 80px 0;
+      background-color: var(--color-bg-panel);
+    }
+    
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    
+    .agent-card {
+      background-color: rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border-standard);
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+    
+    .agent-card:hover {
+      background-color: rgba(255,255,255,0.03);
+      transform: translateY(-2px);
+    }
+    
+    .agent-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .agent-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    
+    .status-active { background-color: var(--color-success); }
+    .status-thinking { background-color: #f59e0b; }
+    .status-idle { background-color: var(--color-text-quaternary); }
+    
+    .agent-name {
+      font-weight: 700;
+      font-size: 16px;
+      font-feature-settings: 'cv01', 'ss03';
+    }
+    
+    .agent-role {
+      color: var(--color-text-tertiary);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    
+    .agent-model {
+      color: var(--color-text-quaternary);
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+    
+    .agent-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 40px 0 20px;
+      border-top: 1px solid var(--color-border-subtle);
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .footer-link {
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      font-size: 13px;
+      font-feature-settings: 'cv01', 'ss03';
+      transition: color 0.2s ease;
+    }
+    
+    .footer-link:hover {
+      color: var(--color-text-secondary);
+    }
+    
+    .footer-copyright {
+      color: var(--color-text-quaternary);
+      font-size: 11px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .display-xl { font-size: 56px; }
+      .display-large { font-size: 48px; }
+      .display { font-size: 36px; }
+      .h1 { font-size: 28px; }
+    }
+    
+    @media (max-width: 768px) {
+      .display-xl { font-size: 42px; }
+      .display-large { font-size: 36px; }
+      .display { font-size: 28px; }
+      .h1 { font-size: 24px; }
+      
+      .hero {
+        min-height: auto;
+        padding: 60px 0;
+        text-align: center;
+      }
+      
+      .hero-content {
+        max-width: 100%;
+      }
+      
+      .hero-actions {
+        justify-content: center;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-links {
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .display-xl { font-size: 32px; }
+      .display-large { font-size: 28px; }
+      .display { font-size: 22px; }
+      .h1 { font-size: 20px; }
+      
+      .container {
+        padding: 0 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Nebula-inspired animated background -->
+  <div class="nebula-bg" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: 
+      radial-gradient(circle at 15% 50%, rgba(245, 158, 11, 0.03), transparent 30%),
+      radial-gradient(circle at 85% 30%, rgba(94, 106, 210, 0.04), transparent 30%);
+    z-index: -2;
+    pointer-events: none;
+  ">
+    <div class="nebula-orb orb-1" style="
+      position: absolute;
+      top: -15%;
+      left: -15%;
+      width: 60vw;
+      height: 60vw;
+      background: rgba(82, 82, 91, 0.08);
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.3;
+      animation: float 25s infinite ease-in-out;
+    "></div>
+    <div class="nebula-orb orb-2" style="
+      position: absolute;
+      bottom: -15%;
+      right: -15%;
+      width: 70vw;
+      height: 70vw;
+      background: rgba(39, 39, 42, 0.3);
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.6;
+      animation: float 25s infinite ease-in-out;
+    "></div>
+  </div>
+  
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="logo">
+        <span class="h1 linear-font" style="letter-spacing: -0.704px;">LUXOR9</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#agents" class="nav-link">AI Agents</a>
+        <a href="#docs" class="nav-link">Documentation</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-ghost">Sign In</button>
+        <button class="btn-primary">Get Started</button>
+      </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="display-xl linear-font">
+          Deploy a Team of Specialized AI Agents
+        </h1>
+        <p class="body-large linear-font">
+          LUXOR9 is an AI agent orchestration platform that enables you to build, deploy, and manage teams of AI agents for complex workflows. With 12 specialized agent tiers, 121+ models, and zero-cost local execution.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary">Try the Demo</button>
+          <button class="btn-ghost">View Documentation</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="display linear-font" style="text-align: center; margin-bottom: 40px;">
+          Platform Capabilities
+        </h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon" style="
+              background-color: rgba(94, 106, 210, 0.1);
+              color: var(--color-brand-indigo);
+            ">
+              🤖
+            </div>
+            <h3 class="feature-title linear-font">Multi-Tier Agent Architecture</h3>
+            <p class="feature-description">
+              Five hierarchical tiers from Commander to Worker agents, each with specialized roles and capabilities for different complexity levels of tasks.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" style="
+              background-color: rgba(94, 106, 210, 0.1);
+              color: var(--color-brand-indigo);
+            ">
+              🔧
+            </div>
+            <h3 class="feature-title linear-font">Model Context Protocol (MCP)</h3>
+            <p class="feature-description">
+              Standardized way to connect agents to tools, data sources, and services with bi-directional communication and resource discovery.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" style="
+              background-color: rgba(94, 106, 210, 0.1);
+              color: var(--color-brand-indigo);
+            ">
+              📊
+            </div>
+            <h3 class="feature-title linear-font">Real-Time Monitoring</h3>
+            <p class="feature-description">
+              Live dashboards showing agent status, performance metrics, token usage, and system health with detailed audit trails.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" style="
+              background-color: rgba(94, 106, 210, 0.1);
+              color: var(--color-brand-indigo);
+            ">
+              🚀
+            </div>
+            <h3 class="feature-title linear-font">Zero-Cost Local Execution</h3>
+            <p class="feature-description">
+              Run agents locally with open-source models (Ollama, Whisper, etc.) for privacy, cost savings, and offline capabilities.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" style="
+              background-color: rgba(94, 106, 210, 0.1);
+              color: var(--color-brand-indigo);
+            ">
+              ☁️
+            </div>
+            <h3 class="feature-title linear-font">Cloud & Hybrid Deployment</h3>
+            <p class="feature-description">
+              Seamlessly switch between local execution and cloud providers (OpenAI, Anthropic, Groq) based on cost, latency, and capability needs.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" style="
+              background-color: rgba(94, 106, 210, 0.1);
+              color: var(--color-brand-indigo);
+            ">
+              ⚙️
+            </div>
+            <h3 class="feature-title linear-font">Custom Workflow Builder</h3>
+            <p class="feature-description">
+              Drag-and-drop interface to create complex AI workflows with conditional logic, parallel execution, and human-in-the-loop checkpoints.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- AI Agents Section -->
+    <section id="agents" class="agents-section">
+      <div class="container">
+        <h2 class="display linear-font" style="text-align: center; margin-bottom: 40px;">
+          AI Agent Fleet
+        </h2>
+        <p class="text-center body-large linear-font" style="color: var(--color-text-tertiary); max-width: 600px; margin: 0 auto 40px;">
+          LUXOR9 provides 12 specialized AI agents across 5 tiers, each designed for specific roles in your AI workforce.
+        </p>
+        <div class="agents-grid">
+          <!-- Commander Tier -->
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-active"></div>
+              <span class="agent-name">OVERSEER</span>
+            </div>
+            <div class="agent-role">Strategic Command</div>
+            <div class="agent-model">Nemotron 3 Ultra</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          
+          <!-- C-Suite Tier -->
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-thinking"></div>
+              <span class="agent-name">DEVELOPER</span>
+            </div>
+            <div class="agent-role">Full-Stack Engineering</div>
+            <div class="agent-model">DeepSeek V4 Pro</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-idle"></div>
+              <span class="agent-name">RESEARCHER</span>
+            </div>
+            <div class="agent-role">Deep Research & Analysis</div>
+            <div class="agent-model">DeepSeek V4 Flash</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-active"></div>
+              <span class="agent-name">VISIONARY</span>
+            </div>
+            <div class="agent-role">Image & Video Generation</div>
+            <div class="agent-model">Nano Omni</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-idle"></div>
+              <span class="agent-name">COMMUNICATOR</span>
+            </div>
+            <div class="agent-role">Voice & Audio Processing</div>
+            <div class="agent-model">Nano Omni</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          
+          <!-- VP Tier -->
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-active"></div>
+              <span class="agent-name">SPEEDSTER</span>
+            </div>
+            <div class="agent-role">Low-Latency LLM</div>
+            <div class="agent-model">GroqCloud</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-idle"></div>
+              <span class="agent-name">ANALYST</span>
+            </div>
+            <div class="agent-role">Data Analysis & Visualization</div>
+            <div class="agent-model">DeepSeek V4 Pro</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-idle"></div>
+              <span class="agent-name">DIRECTOR</span>
+            </div>
+            <div class="agent-role">Video Production & Editing</div>
+            <div class="agent-model">Cosmos3 Nano</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          
+          <!-- Manager Tier -->
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-active"></div>
+              <span class="agent-name">COORDINATOR</span>
+            </div>
+            <div class="agent-role">Workflow Orchestration</div>
+            <div class="agent-model">Phi-4 Reasoning</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-idle"></div>
+              <span class="agent-name">OPTIMIZER</span>
+            </div>
+            <div class="agent-role">Performance Tuning</div>
+            <div class="agent-model">Starling-LM-7B</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          
+          <!-- Worker Tier -->
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-active"></div>
+              <span class="agent-name">CRAFTSMAN</span>
+            </div>
+            <div class="agent-role">Code Generation & Debugging</div>
+            <div class="agent-model">CodeLlama-70B</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-idle"></div>
+              <span class="agent-name">DOCUMENTER</span>
+            </div>
+            <div class="agent-role">Technical Writing</div>
+            <div class="agent-model">Mistral-7B-Instruct</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-status-dot status-active"></div>
+              <span class="agent-name">TESTER</span>
+            </div>
+            <div class="agent-role">Quality Assurance</div>
+            <div class="agent-model">StarCoder2-15B</div>
+            <div class="agent-actions">
+              <button class="btn-ghost btn-sm">Chat</button>
+              <button class="btn-icon" title="Configure">⚙️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="hero" style="background-color: var(--color-bg-panel);">
+      <div class="container">
+        <div class="hero-content" style="text-align: center;">
+          <h2 class="display-large linear-font">
+            Ready to Build Your AI Agency?
+          </h2>
+          <p class="body-large linear-font" style="color: var(--color-text-secondary); max-width: 500px; margin: 0 auto 32px;">
+            Start with our open-source core, deploy locally with zero API costs, and scale to enterprise needs as your AI workforce grows.
+          </p>
+          <div class="hero-actions" style="justify-content: center;">
+            <button class="btn-primary">Get Started Free</button>
+            <button class="btn-ghost">Explore Documentation</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div>
+            <h3 class="h3 linear-font" style="margin-bottom: 16px;">LUXOR9</h3>
+            <p class="caption linear-font">
+              AI Agent Orchestration Platform • Built for developers, teams, and enterprises seeking to harness the power of specialized AI agents.
+            </p>
+          </div>
+          <div>
+            <h4 class="h4 linear-font" style="margin-bottom: 12px;">Product</h4>
+            <div class="footer-links">
+              <a href="#" class="footer-link">Features</a>
+              <a href="#" class="footer-link">Documentation</a>
+              <a href="#" class="footer-link">Pricing</a>
+              <a href="#" class="footer-link">Security</a>
+            </div>
+          </div>
+          <div>
+            <h4 class="h4 linear-font" style="margin-bottom: 12px;">Company</h4>
+            <div class="footer-links">
+              <a href="#" class="footer-link">About</a>
+              <a href="#" class="footer-link">Careers</a>
+              <a href="#" class="footer-link">Blog</a>
+              <a href="#" class="footer-link">Contact</a>
+            </div>
+          </div>
+          <div>
+            <h4 class="h4 linear-font" style="margin-bottom: 12px;">Resources</h4>
+            <div class="footer-links">
+              <a href="#" class="footer-link">API Reference</a>
+              <a href="#" class="footer-link">SDKs</a>
+              <a href="#" class="footer-link">Templates</a>
+              <a href="#" class="footer-link">Status</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright linear-font" style="margin-top: 32px; text-align: center; padding-top: 20px; border-top: 1px solid var(--color-border-subtle);">
+          © 2026 LUXOR9. All rights reserved. • <a href="#" class="footer-link">Terms</a> • <a href="#" class="footer-link">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <style>
+    /* Nebula animation */
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(20px, -20px) scale(1.05); }
+    }
+    
+    /* Responsive adjustments for nebula */
+    @media (max-width: 768px) {
+      .nebula-bg {
+        background: 
+          radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.02), transparent 25%),
+          radial-gradient(circle at 80% 30%, rgba(94, 106, 210, 0.03), transparent 25%);
+      }
+      .nebula-orb { display: none; }
+    }
+  </style>
+</body>
+</html>

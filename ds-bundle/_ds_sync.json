@@ -1,0 +1,34 @@
+{
+  "shape": "package",
+  "styleSha": "2887c21008535c55b3660f6eaae88a086a2901efe4e4430153392f282c5fa14e",
+  "renderHashes": {
+    "AgentBuilder": "68d8c14fcc958931",
+    "AuditReportCard": "56b1555ecb884cdc",
+    "MobileDashboard": "434086a87b5ecb53",
+    "TaskBoard": "a2fa173f07c86e77"
+  },
+  "sourceKeys": {
+    "AgentBuilder": "a1b8dc69c31c07e4",
+    "AuditReportCard": "dd919ec702611bcf",
+    "MobileDashboard": "f2ea493b3f6a9653",
+    "TaskBoard": "240b2b3a31ab96cb"
+  },
+  "keyRecipe": 7,
+  "scriptsSha": "5741b18a21a90534",
+  "sourceHashes": {
+    "components/general/AgentBuilder/AgentBuilder.jsx": "4d8734625165",
+    "components/general/AgentBuilder/AgentBuilder.d.ts": "2eea5de061b5",
+    "components/general/AgentBuilder/AgentBuilder.prompt.md": "a9ad1d381564",
+    "components/general/AuditReportCard/AuditReportCard.jsx": "596902266a8c",
+    "components/general/AuditReportCard/AuditReportCard.d.ts": "7ef76c122868",
+    "components/general/AuditReportCard/AuditReportCard.prompt.md": "235063b58f46",
+    "components/general/MobileDashboard/MobileDashboard.jsx": "de34deb76466",
+    "components/general/MobileDashboard/MobileDashboard.d.ts": "e04ca5aa516d",
+    "components/general/MobileDashboard/MobileDashboard.prompt.md": "4c371b91865d",
+    "components/general/TaskBoard/TaskBoard.jsx": "d7333c8c7523",
+    "components/general/TaskBoard/TaskBoard.d.ts": "b756606eb308",
+    "components/general/TaskBoard/TaskBoard.prompt.md": "91b46658ac07"
+  },
+  "auxSha": "71a886e7df499955",
+  "bundleSha12": "8c51d6050d89"
+}

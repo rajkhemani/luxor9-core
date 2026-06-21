@@ -1,0 +1,83 @@
+# LUXOR9 — Open-Source / Zero-API-Key overlay
+#
+# Adds fully self-hosted providers (LLM, STT, TTS, search, vectors) and points
+# the API at them. Compose with the dev stack:
+#
+#     docker compose -f docker-compose.dev.yml -f docker-compose.oss.yml up
+#     # or: make oss-up
+#
+# First run, pull the local models:  make oss-models
+services:
+  api:
+    environment:
+      - OSS_MODE=auto
+      - OLLAMA_URL=http://ollama:11434
+      - WHISPER_URL=http://whisper:9000
+      - KOKORO_URL=http://kokoro:8880
+      - SEARXNG_URL=http://searxng:8080
+      - CHROMA_URL=http://chroma:8000
+
+  # ── LLM + embeddings (replaces GroqCloud / OpenAI / NVIDIA NIM) ──
+  ollama:
+    image: ollama/ollama:latest
+    container_name: luxor9-ollama-dev
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - luxor9-dev
+
+  # ── Speech-to-text (replaces Deepgram) ──
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    container_name: luxor9-whisper-dev
+    ports:
+      - "9000:9000"
+    environment:
+      - ASR_MODEL=base
+      - ASR_ENGINE=faster_whisper
+    networks:
+      - luxor9-dev
+
+  # ── Text-to-speech (replaces ElevenLabs) — CPU only ──
+  kokoro:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+    container_name: luxor9-kokoro-dev
+    ports:
+      - "8880:8880"
+    networks:
+      - luxor9-dev
+
+  # ── Web search (replaces Exa / Tavily) ──
+  searxng:
+    image: searxng/searxng:latest
+    container_name: luxor9-searxng-dev
+    ports:
+      - "8888:8080"
+    volumes:
+      - ./infra/searxng:/etc/searxng:rw
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8888/
+    networks:
+      - luxor9-dev
+
+  # ── Vector store (agent memory / RAG) ──
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: luxor9-chroma-dev
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma-data:/data
+    networks:
+      - luxor9-dev
+
+volumes:
+  ollama-models:
+  chroma-data:

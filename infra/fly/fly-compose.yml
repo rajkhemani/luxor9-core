@@ -1,0 +1,21 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}
+    restart: always
+
+  ui:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.ui
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: always

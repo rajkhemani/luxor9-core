@@ -1,0 +1,14 @@
+.git
+.gitignore
+.vscode
+.env
+.env.*
+*.log
+node_modules/
+dist/
+build/
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store
+.gitkeep
