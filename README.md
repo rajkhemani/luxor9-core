@@ -1,5 +1,11 @@
 # Luxor9 Core
 
+> **Note:** this repository holds the design-system bundle, deployment configs, and strategy
+> docs. It contains no application code — the features described below are implemented in
+> [`rajkhemani/luxor9-unified-os`](https://github.com/rajkhemani/luxor9-unified-os).
+> `make dev` and the test suite referenced here run in that repo, not this one.
+> See `CLAUDE.md`.
+
 A comprehensive AI agent platform with Linear-inspired UI, designed for autonomous AI agents and multi-agent workflows.
 
 ## Features
